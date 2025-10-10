@@ -1,0 +1,6 @@
+name = "Shopify App Template"
+roles = ["frontend", "backend"]
+webhooks_path = "/hooks"
+
+[commands]
+dev = "npm run dev"
