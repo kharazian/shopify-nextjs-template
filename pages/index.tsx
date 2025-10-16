@@ -1,15 +1,14 @@
 import Head from "next/head";
 import type { GetServerSidePropsContext } from "next";
-import { ShopifyContext } from "@/utils/ShopifyContext";
+import { ShopifyRequestContext } from "@/utils/ShopifyRequestContext ";
 import { useEffect, useState } from "react";
 
 export async function getServerSideProps(context: GetServerSidePropsContext) {
-  const shopifyCtx = await ShopifyContext.init(context);
+  const shopifyCtx = await ShopifyRequestContext.fromSSR(context);
 
   return {
     props: {
-      shop: shopifyCtx.getShop(),
-      idToken: shopifyCtx.getIdToken(),
+      shop: shopifyCtx.getShop()
     },
   };
 }
