@@ -1,9 +1,10 @@
 import Head from "next/head";
 import type { GetServerSidePropsContext } from "next";
 import { ShopifyContext } from "@/utils/ShopifyContext";
+import { useEffect, useState } from "react";
 
 export async function getServerSideProps(context: GetServerSidePropsContext) {
-  const shopifyCtx = ShopifyContext.init(context);
+  const shopifyCtx = await ShopifyContext.init(context);
 
   return {
     props: {
@@ -14,6 +15,21 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
 }
 
 export default function Home() {
+  const [shopName , setShopName] = useState("empty");
+
+  async function getShopName() {
+    const res = await fetch("api/hello")    
+    const data = await res.json();
+    console.log(data);
+    if(data?.name) {
+      setShopName(data.name);
+    }
+  }
+
+  useEffect(() => {
+    getShopName();
+  }, []);
+
   return (
     <>
       <Head>
@@ -24,7 +40,7 @@ export default function Home() {
         />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
       </Head>
-<s-page heading="Welcome to your Shopify App Template">
+<s-page heading="Shopify App Template">
       <s-section>
         <s-box
           padding="base"
@@ -33,7 +49,7 @@ export default function Home() {
           borderRadius="base"
         >
           <s-text>
-            Welcome to your Shopify App Template
+            Shopify App Template -- {shopName}
           </s-text>
           <s-paragraph>
             Built with React 19, Polaris Web Components, Prisma, and MongoDB.

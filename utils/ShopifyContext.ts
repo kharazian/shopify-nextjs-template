@@ -1,29 +1,21 @@
-import type { GetServerSidePropsContext } from "next";
+import { Session } from '@shopify/shopify-api';
+import '@shopify/shopify-api/adapters/node';
+import { NextApiRequest, NextApiResponse } from 'next';
 
-export class ShopifyContext {
-  private shop: string;
-  private idToken: string;
+const isDev = process.env.NODE_ENV === 'development';
 
-  private constructor(context: GetServerSidePropsContext) {
-    this.shop = extractString(context.query.shop);
-    this.idToken = extractString(context.query.id_token);
-  }
+export class ShopifyContextManager {
+  shop?: string;
+  idToken?: string;
+  onlineSession?: Session;
+  offlineSession?: Session;
+  isFreshInstall = false;
 
-  static init(context: GetServerSidePropsContext): ShopifyContext {
-    return new ShopifyContext(context);
-  }
+  constructor(private req: NextApiRequest, private res: NextApiResponse) {}
 
-  getShop(): string {
-    return this.shop;
-  }
+  static async init(req: NextApiRequest, res: NextApiResponse): Promise<ShopifyContextManager> {
+    const ctx = new ShopifyContextManager(req, res);
 
-  getIdToken(): string {
-    return this.idToken;
+    return ctx;
   }
 }
-
-const extractString = (param: string | string[] | undefined): string => {
-  if (typeof param === "string") return param;
-  if (Array.isArray(param)) return param[0] || "";
-  return "";
-};
