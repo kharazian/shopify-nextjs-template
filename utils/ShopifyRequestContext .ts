@@ -2,6 +2,7 @@ import { Session } from '@shopify/shopify-api';
 import '@shopify/shopify-api/adapters/node';
 import { GetServerSidePropsContext, NextApiRequest, NextApiResponse } from 'next';
 import validateJWT from './validateJWT';
+import shopify from './shopify';
 
 const isDev = process.env.NODE_ENV === 'development';
 
@@ -43,6 +44,10 @@ export class ShopifyRequestContext {
   private async resolve() {
     if (!this._token) throw new Error('Missing session token');
     const payload = validateJWT(this._token);
+debugger;
+    this._shop = shopify.utils.sanitizeShop(payload.dest.replace('https://', '')) || undefined;
+    if (!this._shop) throw new Error('Invalid shop');
+
   }
 
   getShop() {
