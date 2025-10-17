@@ -33,5 +33,10 @@ export default function validateJWT(token: string): ShopifyJWT {
   const payloadJson = Buffer.from(payloadB64, 'base64').toString('utf8');
   const payload = JSON.parse(payloadJson) as ShopifyJWT;
 
+  const now = Math.floor(Date.now() / 1000);
+  if (payload.exp < now || payload.nbf > now) {
+    throw new Error('JWT expired or not yet valid');
+  }
+
   return payload;
 }
