@@ -8,7 +8,7 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
 
   return {
     props: {
-      shop: shopifyCtx.getShop()
+      shop: shopifyCtx.shop,
     },
   };
 }
