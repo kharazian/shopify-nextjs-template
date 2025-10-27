@@ -1,5 +1,8 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
+import ShopifyRequestContext from "@/utils/ShopifyRequestContext";
 
-export default function handler(req, res) {
-  res.status(200).json({ name: "John Doe" });
+const handler = async (req, res) => {
+  res.status(200).json({ name: req.ctx.shop });
 }
+
+export default ShopifyRequestContext.withShopifySession()(handler);
