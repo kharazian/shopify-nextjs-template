@@ -3,4 +3,4 @@ roles = ["frontend", "backend"]
 webhooks_path = "/hooks"
 
 [commands]
-dev = "npm run dev"
+dev = "rm -rf .next && npm run dev"
